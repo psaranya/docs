@@ -1,0 +1,104 @@
+Encapsulation protects an object’s internal state and enforces rules.
+Abstraction hides implementation details and exposes only behavior.
+Inheritance allows reuse through IS-A relationships, but should be used carefully.
+Polymorphism allows different implementations to be treated uniformly using a common interface.
+
+Why is inheritance considered dangerous in large applications?
+Inheritance creates tight coupling. A small change in the parent class can break all child classes.
+
+Can inheritance break encapsulation?”
+Yes. Subclasses can access protected members and modify internal behavior, exposing parent internals.
+
+“If all fields are private, is encapsulation guaranteed?”
+Correct Interview Answer
+No. Making fields private is necessary but not sufficient.Encapsulation is about protecting object invariants, not just hiding fields.
+You can still violate encapsulation by exposing mutable state or allowing uncontrolled updates.
+No, private fields alone do not guarantee encapsulation.Encapsulation means the object protects its own invariants.
+If a class exposes mutable internal state or allows uncontrolled setters, encapsulation is violated even with private fields.
+
+Encapsulation = hiding internal state and allowing access only through controlled methods.In Java:
+Fields → private
+Access → via methods (getters, behavior methods)
+Encapsulation
+Protects how data is stored and modified
+Focuses on object internals
+Abstraction
+Shows what an object can do,Abstraction hides complexity.
+Hides how it does it
+
+
+Q1️⃣ Explain the four pillars of OOPS.
+
+OOPS is based on Encapsulation, Abstraction, Inheritance, and Polymorphism.
+Encapsulation protects an object’s internal state and enforces rules.
+Abstraction hides implementation details and exposes only behavior.
+Inheritance allows reuse through IS-A relationships, but should be used carefully.
+Polymorphism allows different implementations to be treated uniformly using a common interface.
+
+Q2️⃣ If all fields are private, is encapsulation guaranteed?
+No. Private fields are necessary but not sufficient.
+Encapsulation means protecting object invariants.
+If a class exposes mutable internal objects or provides uncontrolled setters, encapsulation is still violated even with private fields.
+
+Q3️⃣ Difference between encapsulation and abstraction?
+Encapsulation is about hiding and protecting state, while abstraction is about hiding complexity.
+Encapsulation focuses on how data is modified, abstraction focuses on what the object can do.
+In practice, both work together.
+
+Q4️⃣ Why is inheritance discouraged in favor of composition?
+Inheritance creates tight coupling and makes systems rigid.
+Composition provides flexibility, better testability, and allows behavior changes at runtime.
+That’s why most Spring applications prefer composition over inheritance.
+
+Q5️⃣ Can you violate encapsulation even with private fields?
+Yes. Exposing internal mutable objects or allowing unrestricted setters violates encapsulation even if fields are private.
+
+Q6️⃣ What is polymorphism? Give a real-world coding example.
+Polymorphism allows one interface to have multiple implementations.
+Code depends on abstractions, not concrete classes, enabling flexibility and extensibility.
+
+Q7️⃣ Method overloading vs overriding — when do bugs happen?
+Overloading happens at compile time and can cause ambiguity, especially with null arguments.
+Overriding happens at runtime and respects polymorphism.
+
+Q8️⃣ Why is equals() and hashCode() contract important?
+Hash-based collections rely on this contract.
+If two objects are equal, their hash codes must be equal; otherwise retrieval fails.
+
+Q9️⃣ Is using getters and setters always good practice?
+No. Excessive getters and setters lead to anemic models.
+It’s better to expose meaningful behavior rather than raw data access.
+
+Q🔟 What is Liskov Substitution Principle in simple terms?
+A subclass should be usable wherever its parent is expected without breaking behavior.
+If overriding changes expected behavior, LSP is violated.
+
+Q1️⃣1️⃣ Interface vs abstract class — when do you choose which?
+Interfaces define contracts and support multiple inheritance.
+Abstract classes share common behavior and state.
+Prefer interfaces for flexibility.
+
+Q1️⃣2️⃣ What is tight coupling and why is it bad?
+Tight coupling means changes in one class impact many others.
+It reduces flexibility, testability, and maintainability.
+
+Q1️⃣3️⃣ Can inheritance break encapsulation?
+Yes. Subclasses can access protected members and alter internal behavior, exposing implementation details.
+
+Q1️⃣4️⃣ What is an anemic domain model?
+A model that only holds data with getters/setters and no behavior.
+Business logic ends up scattered in services.
+
+Q1️⃣5️⃣ What is the biggest OOPS mistake developers make?
+Misusing inheritance for code reuse instead of using composition and abstraction.
+
+In real-world Java applications, OOPS is not about using all four pillars everywhere, but about applying them correctly.
+I focus on encapsulation to protect invariants, abstraction to hide complexity, composition over inheritance for flexibility, and polymorphism to remove conditionals.”
+
+
+
+
+
+
+
+I focus on encapsulation to protect invariants, abstraction to hide complexity, composition over inheritance for flexibility, and polymorphism to remove conditionals.”
