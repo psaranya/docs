@@ -6,3 +6,21 @@ Solutions:
 @Primary
 @Qualifier
 Custom @Bean(name="...")
+
+what is @Transactional in spring jpa?
+Exception(checked) thrown but data still commits.why?
+Default Spring @Transactional behavior (VERY important)
+
+If you do NOT specify any rollback attributes:
+
+❌ Transaction will ROLL BACK if:
+
+RuntimeException
+
+Unchecked exception
+
+Error
+
+✅ Transaction will COMMIT if:
+
+Checked exception (Exception, IOException, SQLException, etc.)
