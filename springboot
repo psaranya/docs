@@ -1,0 +1,8 @@
+What happens if two beans of the same type exist?
+
+Answer:
+Spring throws NoUniqueBeanDefinitionException
+Solutions:
+@Primary
+@Qualifier
+Custom @Bean(name="...")
