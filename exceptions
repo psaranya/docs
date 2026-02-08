@@ -1,0 +1,96 @@
+1️⃣ Checked Exception
+✅ Definition
+
+A checked exception is an exception that is checked by the compiler at compile time.
+
+👉 The compiler forces you to handle it using:
+
+try-catch or
+
+throws keyword
+
+If you don’t handle it, your code will not compile.
+
+🔹 Examples
+
+IOException
+
+SQLException
+
+FileNotFoundException
+
+ClassNotFoundException
+
+🔹 Example Code
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class CheckedExceptionExample {
+    public static void main(String[] args) {
+        try {
+            File file = new File("data.txt");
+            FileReader reader = new FileReader(file); // Checked Exception
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+❗ If you remove the try-catch, the compiler will show an error.
+
+🔹 When to use checked exceptions?
+When the caller can recover from the exception
+External resources (file, DB, network)
+2️⃣ Unchecked Exception
+✅ Definition
+An unchecked exception is not checked at compile time.
+It occurs at runtime.
+
+👉 The compiler does NOT force you to handle it.
+
+🔹 Examples
+NullPointerException,ArrayIndexOutOfBoundsException
+ArithmeticException
+IllegalArgumentException
+
+🔹 Example Code
+public class UncheckedExceptionExample {
+    public static void main(String[] args) {
+        int a = 10;
+        int b = 0;
+        int result = a / b; // ArithmeticException
+    }
+}
+
+This code compiles successfully, but fails at runtime.
+
+🔹 When to use unchecked exceptions?
+Programming errors
+Invalid logic
+
+Exception occurs in @Transactional method
+Question:
+Your Spring Boot service calls an external service using RestTemplate / Feign, and the external service is down. How do you handle this?
+
+Answer:
+Catch client-specific exceptions (HttpClientErrorException, FeignException)
+Translate them into custom business exceptions
+Return a meaningful HTTP status to the client
+Add timeout + retry (if applicable)
+
+try {
+    externalClient.call();
+} catch (FeignException.ServiceUnavailable ex) {
+    throw new ExternalServiceUnavailableException("Downstream service unavailable");
+}
+
+Best practice:
+Do NOT expose downstream error details
+Use circuit breaker (Resilience4j) for repeated failures
+
+You have AI certifications on your profile. Can you explain what areas of AI you’ve actually worked with, not just studied?
+How do you personally use AI in your day-to-day development work?
+
+Bugs that should be fixed in code
