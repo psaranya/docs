@@ -26,7 +26,6 @@ Abstraction
 Shows what an object can do,Abstraction hides complexity.
 Hides how it does it
 
-
 Q1️⃣ Explain the four pillars of OOPS.
 
 OOPS is based on Encapsulation, Abstraction, Inheritance, and Polymorphism.
@@ -93,12 +92,19 @@ Q1️⃣5️⃣ What is the biggest OOPS mistake developers make?
 Misusing inheritance for code reuse instead of using composition and abstraction.
 
 In real-world Java applications, OOPS is not about using all four pillars everywhere, but about applying them correctly.
-I focus on encapsulation to protect invariants, abstraction to hide complexity, composition over inheritance for flexibility, and polymorphism to remove conditionals.”
+I focus on encapsulation to protect invariants(An invariant is something your code guarantees.Example:A bank account balance should never be negative,An ID should never be null,A list size should always match the number of elements added minus removed)
+These rules must hold before and after every operation., abstraction to hide complexity, composition over inheritance for flexibility, and polymorphism to remove conditionals.”
 
+S – Single Responsibility Principle (SRP)
+One class → one reason to change.A class should do only one thing.Example:(wrong)OrderService does validation + DB + logging
+✅ Separate OrderValidator, OrderRepository, OrderService
+O – Open/Closed Principle (OCP)
+Open for extension, closed for modification
+👉 Add new behavior without changing existing code.
+Example:
+Add a new payment type by creating a new class, not modifying if-else logic.
 
+L – Liskov Substitution Principle (LSP)
+Child must be usable wherever parent is expected
+👉 Subclass should not break parent behavior.
 
-
-
-
-
-I focus on encapsulation to protect invariants, abstraction to hide complexity, composition over inheritance for flexibility, and polymorphism to remove conditionals.”
