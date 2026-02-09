@@ -1,0 +1,44 @@
+What is API Gateway?
+Answer:
+API Gateway is a single entry point for all client requests.
+Handles:
+Routing
+Authentication
+Rate limiting
+Example:
+Client → API Gateway → Order Service
+
+How do you maintain data consistency across services?
+Answer:
+Using Saga Pattern (event-based or orchestration).
+Example:
+Order created → Payment failed → Order cancelled
+
+What is Saga Pattern?
+Answer:
+Saga manages distributed transactions using multiple local transactions.
+Types:
+Choreography (events)
+Orchestration (central controller)
+
+What is Circuit Breaker?
+Answer:
+Circuit Breaker stops calling a failing service to prevent cascading failures.
+Tool: Resilience4j
+Example:
+If Payment Service is down, Order Service skips calling it temporarily.
+
+What is Fault Tolerance?
+Answer:
+Ability of system to continue working even if some services fail.
+Example:
+Fallback response: “Payment service unavailable, try later”
+
+11. What is Load Balancing?
+Answer:
+Distributes requests across multiple instances of a service.
+Example:
+3 instances of Order Service → requests spread evenly.
+
+
+Answer:
