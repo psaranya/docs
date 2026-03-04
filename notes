@@ -1,0 +1,9 @@
+Use this directly in the PR comment:
+
+The Swagger YAML is treated as the source of truth.
+Model classes are regenerated from it and copied into src without modification.
+I agree the process is manual today, and automation/direct generation into src would be a good future improvement.
+
+If you want an even shorter version:
+
+Models are regenerated from Swagger and copied into src without field changes. Automation can be explored later.
