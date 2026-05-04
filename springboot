@@ -1,4 +1,24 @@
-https://signal.group/#CjQKIMtHIzbiMKGLswpEINR1hyzPVPT7cQhN5rvyou45XDPXEhDasbs9_EkSjs3O7tupPQcc
+Question
+
+How does transaction management work in Spring? What are common pitfalls?
+
+✅ Strong Answer Should Include
+@Transactional basics (proxy-based, AOP)
+Propagation types (REQUIRED, REQUIRES_NEW)
+Rollback rules (only runtime exceptions by default)
+Pitfalls:
+self-invocation problem
+long-running transactions
+mixing DB + external calls
+
+How do you handle concurrent updates to the same record?
+
+✅ Strong Answer
+Optimistic locking (@Version)
+Pessimistic locking
+Trade-offs:
+optimistic → better performance
+pessimistic → safer but slower
 
 What happens if two beans of the same type exist?
 
