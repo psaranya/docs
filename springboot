@@ -1,15 +1,78 @@
-✅ Encapsulation
+What is Spring Boot and why use it?
 
-“Encapsulation is wrapping data and methods together and restricting direct access to the data using access modifiers. It ensures data security and controlled access via methods.”
-Abstraction
+👉 Strong answer:
 
-“Abstraction is hiding implementation details and exposing only essential functionality using interfaces or abstract classes. It helps reduce complexity and improves flexibility.”
-Encapsulation → Bank account (balance is private, accessed via methods)
-Abstraction → Payment system (user just calls pay(), doesn’t know internal logic)
-Encapsulation → data hiding + control
-Abstraction → hiding complexity
-Encapsulation is about how data is accessed
-Abstraction is about what is exposed
+Auto-configuration, embedded server, starter dependencies
+Eliminates boilerplate Spring setup
+Production-ready features (Actuator, metrics)
+
+ow does auto-configuration work?
+
+👉 Talk about:
+
+@EnableAutoConfiguration
+Conditional beans (@ConditionalOnClass, @ConditionalOnMissingBean)
+spring.factories / AutoConfiguration.imports
+Dependency Injection & Design
+❓ Constructor vs Field Injection?
+
+👉 Say:
+
+Constructor injection → immutable, testable, recommended
+Field injection → harder to test, reflection-based
+
+Why use @RequiredArgsConstructor?
+
+👉 Answer:
+
+Generates constructor for final fields
+Encourages immutability + clean DI
+
+ow does @Transactional work?
+
+👉 Must mention:
+
+Proxy-based (AOP)
+Works only on public methods
+Self-invocation issue
+
+Propagation types?
+
+👉 Focus on:
+
+REQUIRED (default)
+REQUIRES_NEW (new transaction)
+MANDATORY, SUPPORTS
+
+What is LazyInitializationException?
+Happens when lazy-loaded entity accessed outside session
+Fix:
+JOIN FETCH
+DTO projection
+Open session (not recommended)
+
+Difference: FetchType.LAZY vs EAGER
+
+👉 Say:
+
+LAZY → loaded on demand (preferred)
+EAGER → loaded immediately (can cause performance issues)
+
+What is N+1 problem?
+
+👉 Answer:
+
+Multiple queries due to lazy loading in loop
+Fix:
+JOIN FETCH
+EntityGraph
+Batch fetching
+
+What is Feign?
+
+👉 Declarative REST client
+
+
 
 Question
 
