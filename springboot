@@ -1,75 +1,130 @@
-What is Dependency Injection (DI)
-DI means Spring provides objects (dependencies) to your class instead of you creating them.
+What happens if you put @Transactional on a private method?
+@Service
+public class CashService {
 
-Constructor injection → immutable, testable, recommended
-Field injection → harder to test, reflection-based
-Constructor injection is the recommended approach where dependencies are provided through the constructor, making them immutable and easier to test. Field injection uses reflection to inject dependencies directly into fields, which makes testing harder and doesn’t enforce required dependencies.
+    @Transactional
+    private void process() {
+        // DB operations
+    }
+}
 
-Why use @RequiredArgsConstructor?
+👉 Spring will ignore it
+👉 No transaction will be created
+Spring uses AOP proxies for @Transactional.
 
-👉 Answer:
+👉 Key rule:
 
-Generates constructor for final fields
-Encourages immutability + clean DI
+Transactions are applied only when a method is called through the Spring proxy
+Problem 1: Private methods are not proxied
+Proxies can only intercept public methods
+Private methods are not visible to proxy
 
-ow does @Transactional work?
+👉 So Spring cannot wrap it with transaction logic
+Problem 2: Self-invocation (very important)
+@Service
+public class CashService {
 
-👉 Must mention:
+    public void outer() {
+        process(); // ❌ direct call (no proxy)
+    }
 
-Proxy-based (AOP)
-Works only on public methods
-Self-invocation issue
+    @Transactional
+    public void process() {
+        // expected transaction
+    }
+}
 
-Propagation types?
+👉 Even though process() is public:
 
-👉 Focus on:
+It is called internally
+Proxy is bypassed
 
-REQUIRED (default)
-REQUIRES_NEW (new transaction)
-MANDATORY, SUPPORTS
+👉 Transaction will NOT work
 
-What is LazyInitializationException?
-Happens when lazy-loaded entity accessed outside session
-Fix:
-JOIN FETCH
-DTO projection
-Open session (not recommended)
+🔥 Correct Ways to Use @Transactional
+✅ 1. Use on public methods
+@Transactional
+public void process() {
+    // works
+}
+✅ 2. Call from another bean (important fix)
+@Service
+public class CashService {
 
-Difference: FetchType.LAZY vs EAGER
+    private final HelperService helper;
 
-👉 Say:
+    public CashService(HelperService helper) {
+        this.helper = helper;
+    }
 
-LAZY → loaded on demand (preferred)
-EAGER → loaded immediately (can cause performance issues)
+    public void outer() {
+        helper.process(); // ✅ goes through proxy
+    }
+}
 
-What is N+1 problem?
+@Service
+class HelperService {
 
-👉 Answer:
+    @Transactional
+    public void process() {
+        // transaction works
+    }
+}
+Correct Ways to Use @Transactional
+✅ 1. Use on public methods
+@Transactional
+public void process() {
+    // works
+}
+✅ 2. Call from another bean (important fix)
+@Service
+public class CashService {
 
-Multiple queries due to lazy loading in loop
-Fix:
-JOIN FETCH
-EntityGraph
-Batch fetching
+    private final HelperService helper;
 
-What is Feign?
+    public CashService(HelperService helper) {
+        this.helper = helper;
+    }
 
-👉 Declarative REST client
+    public void outer() {
+        helper.process(); // ✅ goes through proxy
+    }
+}
 
+@Service
+class HelperService {
 
+    @Transactional
+    public void process() {
+        // transaction works
+    }
+}
+✅ 3. Put @Transactional on entry method
+@Transactional
+public void outer() {
+    process(); // now inside transaction
+}
+💥 Real Issue You Might Face (Your Project)
 
-Question
+You said:
 
-How does transaction management work in Spring? What are common pitfalls?
+create → update → call MF → rollback if failed
 
-✅ Strong Answer Should Include
-@Transactional basics (proxy-based, AOP)
-Propagation types (REQUIRED, REQUIRES_NEW)
-Rollback rules (only runtime exceptions by default)
-Pitfalls:
-self-invocation problem
-long-running transactions
-mixing DB + external calls
+If transaction is on a private/internal method:
+
+Rollback won’t happen ❌
+Partial data saved ❌
+💬 Interview Answer (Perfect)
+
+“@Transactional does not work on private methods because Spring uses proxy-based AOP, which only intercepts public methods. Also, if a transactional method is called internally within the same class, the proxy is bypassed, so the transaction won’t be applied.”
+
+🚀 Senior-Level Add-on
+
+“To ensure transactions work correctly, the transactional method should be public and invoked through a Spring-managed proxy, typically from another bean or as the entry point of the operation.”
+
+⚡ One-Line Memory Trick
+
+👉 “No proxy → No transaction”
 
 How do you handle concurrent updates to the same record?
 
