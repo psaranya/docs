@@ -1,25 +1,9 @@
-What is Spring Boot and why use it?
-
-👉 Strong answer:
-
-Auto-configuration, embedded server, starter dependencies
-Eliminates boilerplate Spring setup
-Production-ready features (Actuator, metrics)
-
-ow does auto-configuration work?
-
-👉 Talk about:
-
-@EnableAutoConfiguration
-Conditional beans (@ConditionalOnClass, @ConditionalOnMissingBean)
-spring.factories / AutoConfiguration.imports
-Dependency Injection & Design
-❓ Constructor vs Field Injection?
-
-👉 Say:
+What is Dependency Injection (DI)
+DI means Spring provides objects (dependencies) to your class instead of you creating them.
 
 Constructor injection → immutable, testable, recommended
 Field injection → harder to test, reflection-based
+Constructor injection is the recommended approach where dependencies are provided through the constructor, making them immutable and easier to test. Field injection uses reflection to inject dependencies directly into fields, which makes testing harder and doesn’t enforce required dependencies.
 
 Why use @RequiredArgsConstructor?
 
