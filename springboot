@@ -1,3 +1,16 @@
+✅ Encapsulation
+
+“Encapsulation is wrapping data and methods together and restricting direct access to the data using access modifiers. It ensures data security and controlled access via methods.”
+Abstraction
+
+“Abstraction is hiding implementation details and exposing only essential functionality using interfaces or abstract classes. It helps reduce complexity and improves flexibility.”
+Encapsulation → Bank account (balance is private, accessed via methods)
+Abstraction → Payment system (user just calls pay(), doesn’t know internal logic)
+Encapsulation → data hiding + control
+Abstraction → hiding complexity
+Encapsulation is about how data is accessed
+Abstraction is about what is exposed
+
 Question
 
 How does transaction management work in Spring? What are common pitfalls?
