@@ -1,3 +1,7 @@
+Thanks for sharing your ideas and experience, David. I really appreciate the guidance and the time you took to explain these points.
+
+I’ll definitely reach out if I have any doubts or need suggestions in the future. It’s great to have a friendly and experienced DevOps coach in the team who is willing to help us improve.
+
 Hello Saranya. I am currently looking at kash-ta02 and ta03. I am wondering why you keep branches after their merge into master. Do you plan to make new changes after the merge ?
  
 I also see that you are not a big fan of service class implementing an interface  do you have a specific reason to skip them ? 
