@@ -1,17 +1,60 @@
-Thanks for sharing your ideas and experience, David. I really appreciate the guidance and the time you took to explain these points.
+I would like to propose a database-level solution to address defect 2156187 , with the following objectives:
+1.	Prevent multiple OPEN cash stock sessions for the same cash_stock.
+2.	Enforce strict validation on: 
+o	status (only OPEN / CLOSE)
+o	session_type (currently limited to BRANCH)
+Below is the proposed approach and corresponding SQL scripts.
+1) Unique constraint for OPEN sessions
+To ensure that only one OPEN session can exist per cash stock, we introduce a partial unique index:
+CREATE UNIQUE INDEX uk_cash_stock_session_simultaneous_open
+ON own_87929_kash.cash_stock_session(cash_stock_id)
+WHERE status = 'OPEN';
+Expected behavior:
+•	Multiple CLOSED sessions remain allowed (history preserved)
+•	Any attempt to create a second OPEN session will be rejected
+→ Database error: SQLSTATE 23505
+•	Backend handling: map this error to the existing business error
+KASH_10001011 ("Multiple processes cannot access the CashStock Open simultaneously")
+2) CHECK constraints for data integrity
+To enforce valid values for status and session_type:
+-- Enforce status = 'OPEN' or 'CLOSE'
+ALTER TABLE own_87929_kash.cash_stock_session
+ADD CONSTRAINT chk_cash_stock_session_status
+CHECK (status IN ('OPEN', 'CLOSE'));
 
-I’ll definitely reach out if I have any doubts or need suggestions in the future. It’s great to have a friendly and experienced DevOps coach in the team who is willing to help us improve.
+-- Enforce session_type = 'BRANCH' only (extendable later)
+ALTER TABLE own_87929_kash.cash_stock_session
+ADD CONSTRAINT chk_cash_stock_session_type
+CHECK (session_type = 'BRANCH');
+Expected behavior:
+•	Invalid values (e.g. status = 'PENDING') will be rejected
+→ Database error: SQLSTATE 23514
+•	Backend should treat this as a technical validation error
+3) Pre-deployment checks
+Before applying the constraints, we need to validate existing data:
+-- Check for duplicate OPEN sessions (to be resolved manually if found)
+SELECT cash_stock_id, COUNT(*)
+FROM own_87929_kash.cash_stock_session
+WHERE status = 'OPEN'
+GROUP BY cash_stock_id
+HAVING COUNT(*) > 1;
 
-Hello Saranya. I am currently looking at kash-ta02 and ta03. I am wondering why you keep branches after their merge into master. Do you plan to make new changes after the merge ?
- 
-I also see that you are not a big fan of service class implementing an interface  do you have a specific reason to skip them ? 
- 
-I can show you a few tips to help you make a more maintainable code  ping me if you are interrested
+-- Check for invalid status values
+SELECT DISTINCT status
+FROM own_87929_kash.cash_stock_session
+WHERE status NOT IN ('OPEN', 'CLOSE');
 
+-- Check for invalid session_type values
+SELECT DISTINCT session_type
+FROM own_87929_kash.cash_stock_session
+WHERE session_type != 'BRANCH';
 
-Regarding the branches, I usually keep them for some time after merge in case additional fixes or follow-up changes are needed. I can clean them up once everything is stable.
-
-About the service interfaces, my understanding was that for internal services with a single implementation, using concrete service classes keeps the code simpler and avoids extra boilerplate. But I’m definitely open to aligning with the team’s preferred approach and best practices.
-
-I’d also be interested in the maintainability tips you mentioned. Please feel free to share them whenever you have time.
- 
+4) Implementation steps
+If the data validation is clean:
+•	Implement the changes in the test environment
+•	Execute functional testing
+•	After QA validation, proceed to production deployment
+Request for validation
+Could you please review this approach and confirm whether it aligns with:
+•	The current backend design
+•	The error handling strategy
