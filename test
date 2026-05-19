@@ -1,10 +1,12 @@
-Hello David,
+We have not fully implemented all error codes. As discussed during the MVP3 release, we agreed to implement only the error codes defined in the attached email.
 
-We are not completely implemented error code as we decided during mvp3 release that we will fix only error codes defined in the attached mail.And regarding /parties/cash-stock-pick-up:initiate  it varies according to the cashstockoperationtypename according to the error code excel, 
+Regarding /parties/cash-stock-pick-up:initiate, the error code varies based on the cashStockOperationTypeName, according to the error code Excel:
 
-DEPOSIT_BAG_COINS_DIRECT_CREDIT("020"),
-DEPOSIT_BAG_COINS_DAMAGED("012"),
-DEPOSIT_BAG_COINS_MACULATED("013"),
-DEPOSIT_BAG_COINS_SUSPICIOUS("014"),
- 
-It will be easier for me to implement if the error code is consistent for deposit bags of coins. But full implementation is not in place we have covered only the required ones.
+DEPOSIT_BAG_COINS_DIRECT_CREDIT ("020")
+DEPOSIT_BAG_COINS_DAMAGED ("012")
+DEPOSIT_BAG_COINS_MACULATED ("013")
+DEPOSIT_BAG_COINS_SUSPICIOUS ("014")
+
+As a suggestion, it would be easier to implement and maintain if the error code were consistent for all deposit bag coin operations. However, if further analysis is required, we can continue with the existing approach.
+
+At the moment, the full implementation is not in place, and we have covered only the required scenarios agreed upon for MVP3.
