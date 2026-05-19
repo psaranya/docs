@@ -1,12 +1,6 @@
-We have not fully implemented all error codes. As discussed during the MVP3 release, we agreed to implement only the error codes defined in the attached email.
-
-Regarding /parties/cash-stock-pick-up:initiate, the error code varies based on the cashStockOperationTypeName, according to the error code Excel:
-
-DEPOSIT_BAG_COINS_DIRECT_CREDIT ("020")
-DEPOSIT_BAG_COINS_DAMAGED ("012")
-DEPOSIT_BAG_COINS_MACULATED ("013")
-DEPOSIT_BAG_COINS_SUSPICIOUS ("014")
-
-As a suggestion, it would be easier to implement and maintain if the error code were consistent for all deposit bag coin operations. However, if further analysis is required, we can continue with the existing approach.
-
-At the moment, the full implementation is not in place, and we have covered only the required scenarios agreed upon for MVP3.
+Hello Saranya. I am currently looking at kash-ta02 and ta03. I am wondering why you keep branches after their merge into master. Do you plan to make new changes after the merge ?
+ 
+I also see that you are not a big fan of service class implementing an interface  do you have a specific reason to skip them ? 
+ 
+I can show you a few tips to help you make a more maintainable code  ping me if you are interrested
+ 
