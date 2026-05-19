@@ -3,4 +3,11 @@ Hello Saranya. I am currently looking at kash-ta02 and ta03. I am wondering why 
 I also see that you are not a big fan of service class implementing an interface  do you have a specific reason to skip them ? 
  
 I can show you a few tips to help you make a more maintainable code  ping me if you are interrested
+
+
+Regarding the branches, I usually keep them for some time after merge in case additional fixes or follow-up changes are needed. I can clean them up once everything is stable.
+
+About the service interfaces, my understanding was that for internal services with a single implementation, using concrete service classes keeps the code simpler and avoids extra boilerplate. But I’m definitely open to aligning with the team’s preferred approach and best practices.
+
+I’d also be interested in the maintainability tips you mentioned. Please feel free to share them whenever you have time.
  
