@@ -1,3 +1,28 @@
+    public void validateUnknownCashBags(ExecuteCashStockDeliveryRequest request) throws CashException {
+        Boolean sealAnnouncedFlag = Boolean.valueOf(request.getCashRequestContext().getCashRequestSealAnnouncedFlag());
+        String internalRefId = request.getCashRequestContext().getInternalReferenceId();
+        Boolean destinationFlag = Optional.ofNullable(request.getCashTransporterBagHelper()).map(CashTransporterBagHelper::getDestinationOtherBranchFlag).orElse(false);
+        if (sealAnnouncedFlag == null) {
+            throw new CashException(Constants.FE_03, "SealAnnouncedFlag is required", HttpStatus.BAD_REQUEST, Constants.FE_ERROR, "");
+        }
+        if (sealAnnouncedFlag) {
+            if (destinationFlag == null) {
+               request.getCashTransporterBagHelper().setDestinationOtherBranchFlag(false);
+            }
+        } else {
+            if (internalRefId == null || internalRefId.isEmpty()) {
+                throw new CashException(Constants.FE_03, "InternalReferenceId is required when SealAnnouncedFlag is FALSE", HttpStatus.BAD_REQUEST, Constants.FE_ERROR, "");
+            }
+
+            if (!internalRefId.matches("\\d{7}")) {
+                throw new CashException(Constants.FE_03, "InternalReferenceId must be numeric and 7 digits when SealAnnouncedFlag is FALSE", HttpStatus.BAD_REQUEST, Constants.FE_ERROR, "");
+            }
+            if (destinationFlag == null) {
+                request.getCashTransporterBagHelper().setDestinationOtherBranchFlag(false);
+            }
+        }
+    }
+
 Hi [Manager Name],
 
 Just wanted to give you a quick heads-up that I had an introductory discussion with David since he recently joined as the DevOps coach for the tribe.
