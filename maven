@@ -1,0 +1,101 @@
+The three commands (compile,package and install) correspond to different phases in Maven's build lifecycle:
+
+validate
+   ↓
+generate-sources
+   ↓
+compile
+   ↓
+test
+   ↓
+package
+   ↓
+verify
+   ↓
+install
+   ↓
+deploy
+When you execute a phase, Maven runs all previous phases automatically.
+1. mvn compile
+Runs up to the compile phase.
+What it does
+Validates the project.
+Generates sources (including your OpenAPI-generated code).
+Compiles Java source code.
+Produces .class files.
+Output:
+target/
+    classes/
+        *.class
+It does not:
+run tests,
+create a JAR,
+install anything into your local Maven repository.
+Use it when
+
+You're coding and just want to verify that the project compiles.
+
+For your project, this is probably the command you'll use most often:
+
+mvn clean compile
+2. mvn package
+
+Runs up to the package phase.
+
+It does everything that compile does, plus:
+
+runs tests (unless skipped),
+packages the application.
+
+If you're building a Spring Boot application, you'll typically get:
+
+target/
+
+kash-service.jar
+
+or
+
+kash-service.war
+
+depending on your packaging.
+
+Use it when
+
+You want a deployable artifact (JAR/WAR).
+
+Example:
+
+mvn clean package
+
+or skip tests:
+
+mvn clean package -DskipTests
+3. mvn install
+
+Runs up to the install phase.
+
+It does everything that package does, plus:
+
+copies the built artifact into your local Maven repository (~/.m2/repository).
+
+For example:
+
+~/.m2/repository/
+
+com/
+   bnppf/
+      adm/
+          kash/
+             1.0.0/
+                 kash-1.0.0.jar
+
+This allows other Maven projects on your machine to depend on your artifact.
+
+Use it when
+You're developing a shared library.
+Another local project needs to use your newly built artifact.
+Visual comparison
+Command	Compiles	Runs Tests	Creates JAR	Installs to ~/.m2
+mvn compile	✅	❌	❌	❌
+mvn package	✅	✅	✅	❌
+mvn install	✅	✅	✅	✅
