@@ -1,3 +1,5 @@
+The Marvin framework versions are centrally managed through the parent POM. Therefore, upgrading the marvin-core.version to the required secure version will automatically resolve the corresponding compatible Marvin base/runtime version. No separate manual update of the base image version is expected in the KASH application; we only need to update the relevant Marvin framework version and validate the resulting dependency/base-image versions.
+
 **Subject: KASH Application – Marvin Framework Upgrade for Nexus Vulnerability Remediation**
 
 Hi [Scrum Master Name],
