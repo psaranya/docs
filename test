@@ -1,136 +1,24 @@
-I need some additional details to investigate this issue. I currently don't have access to the production Xalos environment or the production database, so I'm unable to verify the data from my end.
+public String getTppId() {
 
-I will connect with you offline tomorrow to get more details about the issue so that I can continue the investigation.
+    var securityContext = securityContextProvide.get();
 
-Thanks.
-
-
-would like to request that the QA gate be opened for this instance so that the production version can be deployed.
-
-The deployment is required for testing purposes and to reproduce the reported issues/bugs in an environment that matches the production setup. Having the production version available in this instance will help us validate the behavior and perform further analysis.
-
-Please let me know if any additional information or approvals are required to proceed.
-
-Thank you for your support.
-Dear Team,
-
-I would like to formally escalate an issue regarding the support provided during a medical emergency involving my son, who was admitted to the hospital due to an injury.
-
-As per the communication received, Mr. Velu, the Chennai SPOC, was designated as the point of contact and was stated to be available between 1:00 PM and 7:00 PM. During this period, I made multiple attempts to contact Mr. Velu regarding the required approval process. Unfortunately, my calls went unanswered, and on one occasion the call was disconnected. Despite the urgency of the situation, I did not receive any response or support from him.
-
-As a result, we had to wait nearly 12 hours for the final approval while my son was undergoing treatment. This delay caused significant stress and uncertainty for my family during an already difficult situation.
-
-I understand that unforeseen circumstances can arise; however, in cases involving medical emergencies, timely communication and support are critical. I request that this matter be reviewed and that appropriate steps be taken to ensure that employees and their families receive the necessary assistance without such delays in the future.
-
-I would also appreciate clarification on:
-
-Why there was no response despite multiple attempts to reach Mr. Velu during the stated support hours.
-The reason for the approximately 12-hour delay in obtaining the final approval.
-The measures that will be taken to prevent similar situations for other employees and their families in the future.
-
-Thank you for your attention to this matter. I look forward to your response and resolution of this issue
-
-
-
-Sure, there haven't been many changes since your last review. I have mainly been working on defect fixes and a few minor enhancements.
-
-Currently, I am working on addressing vulnerabilities across all KASH components. A major feature change has been planned and is assigned for the next sprint.
-
-Sure,there is not much changes since you reviewed last time, I was working on defects and few enhancements
-
-Currently working on Vulnearabilites for all kash components, Major feature change is assigned on next sprint
-
-
-public void validateUnknownCashBags(ExecuteCashStockDeliveryRequest request) throws CashException {
-        Boolean sealAnnouncedFlag = Boolean.valueOf(request.getCashRequestContext().getCashRequestSealAnnouncedFlag());
-        String internalRefId = request.getCashRequestContext().getInternalReferenceId();
-        Boolean destinationFlag = Optional.ofNullable(request.getCashTransporterBagHelper()).map(CashTransporterBagHelper::getDestinationOtherBranchFlag).orElse(false);
-        if (sealAnnouncedFlag == null) {
-            throw new CashException(Constants.FE_03, "SealAnnouncedFlag is required", HttpStatus.BAD_REQUEST, Constants.FE_ERROR, "");
-        }
-        if (sealAnnouncedFlag) {
-            if (destinationFlag == null) {
-               request.getCashTransporterBagHelper().setDestinationOtherBranchFlag(false);
-            }
-        } else {
-            if (internalRefId == null || internalRefId.isEmpty()) {
-                throw new CashException(Constants.FE_03, "InternalReferenceId is required when SealAnnouncedFlag is FALSE", HttpStatus.BAD_REQUEST, Constants.FE_ERROR, "");
-            }
-
-            if (!internalRefId.matches("\\d{7}")) {
-                throw new CashException(Constants.FE_03, "InternalReferenceId must be numeric and 7 digits when SealAnnouncedFlag is FALSE", HttpStatus.BAD_REQUEST, Constants.FE_ERROR, "");
-            }
-            if (destinationFlag == null) {
-                request.getCashTransporterBagHelper().setDestinationOtherBranchFlag(false);
-            }
-        }
+    if (securityContext == null) {
+        return null;
     }
 
-Hi [Manager Name],
+    var subjectIdsOptional = securityContext.getOeMappedSubjectIds();
 
-Just wanted to give you a quick heads-up that I had an introductory discussion with David since he recently joined as the DevOps coach for the tribe.
-He mentioned that he is currently reviewing the Java projects across the tribe and sharing potential ideas and improvement suggestions around maintainability and clean code practices.
-We discussed some general topics related to Spring Boot services, including interfaces, testing, and gradual refactoring approaches. I also checked with him whether there was anything urgent that needed to be addressed, and he mentioned there is nothing critical for now, but suggested an evolution path for future improvements.
-Overall, it was a good and constructive discussion, and he mentioned he’ll be available to help and guide us whenever needed.
+    if (subjectIdsOptional == null || !subjectIdsOptional.isPresent()) {
+        return null;
+    }
 
+    var subjectIds = subjectIdsOptional.get();
 
-I would like to propose a database-level solution to address defect 2156187 , with the following objectives:
-1.	Prevent multiple OPEN cash stock sessions for the same cash_stock.
-2.	Enforce strict validation on: 
-o	status (only OPEN / CLOSE)
-o	session_type (currently limited to BRANCH)
-Below is the proposed approach and corresponding SQL scripts.
-1) Unique constraint for OPEN sessions
-To ensure that only one OPEN session can exist per cash stock, we introduce a partial unique index:
-CREATE UNIQUE INDEX uk_cash_stock_session_simultaneous_open
-ON own_87929_kash.cash_stock_session(cash_stock_id)
-WHERE status = 'OPEN';
-Expected behavior:
-•	Multiple CLOSED sessions remain allowed (history preserved)
-•	Any attempt to create a second OPEN session will be rejected
-→ Database error: SQLSTATE 23505
-•	Backend handling: map this error to the existing business error
-KASH_10001011 ("Multiple processes cannot access the CashStock Open simultaneously")
-2) CHECK constraints for data integrity
-To enforce valid values for status and session_type:
--- Enforce status = 'OPEN' or 'CLOSE'
-ALTER TABLE own_87929_kash.cash_stock_session
-ADD CONSTRAINT chk_cash_stock_session_status
-CHECK (status IN ('OPEN', 'CLOSE'));
+    if (subjectIds == null) {
+        return null;
+    }
 
--- Enforce session_type = 'BRANCH' only (extendable later)
-ALTER TABLE own_87929_kash.cash_stock_session
-ADD CONSTRAINT chk_cash_stock_session_type
-CHECK (session_type = 'BRANCH');
-Expected behavior:
-•	Invalid values (e.g. status = 'PENDING') will be rejected
-→ Database error: SQLSTATE 23514
-•	Backend should treat this as a technical validation error
-3) Pre-deployment checks
-Before applying the constraints, we need to validate existing data:
--- Check for duplicate OPEN sessions (to be resolved manually if found)
-SELECT cash_stock_id, COUNT(*)
-FROM own_87929_kash.cash_stock_session
-WHERE status = 'OPEN'
-GROUP BY cash_stock_id
-HAVING COUNT(*) > 1;
+    var tppId = subjectIds.get("TPP_ID");
 
--- Check for invalid status values
-SELECT DISTINCT status
-FROM own_87929_kash.cash_stock_session
-WHERE status NOT IN ('OPEN', 'CLOSE');
-
--- Check for invalid session_type values
-SELECT DISTINCT session_type
-FROM own_87929_kash.cash_stock_session
-WHERE session_type != 'BRANCH';
-
-4) Implementation steps
-If the data validation is clean:
-•	Implement the changes in the test environment
-•	Execute functional testing
-•	After QA validation, proceed to production deployment
-Request for validation
-Could you please review this approach and confirm whether it aligns with:
-•	The current backend design
-•	The error handling strategy
+    return tppId != null ? tppId.toString() : null;
+}
