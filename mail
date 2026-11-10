@@ -1,3 +1,18 @@
+Hi Team,
+
+During the MVP1 and MVP2 development phases, we decided to hardcode certain fields in the Mainframe context because the required information was either not available or was not being received from SAML.
+
+As part of that implementation, we populated the necessary values, such as the User ID, from SAML wherever available. If a particular value was missing, we populated it with a static/default value to avoid exceptions and ensure the flow was not blocked.
+
+This approach was discussed and agreed upon at that time, and we proceeded with the implementation accordingly. Subsequently, we decided to revisit and improve this implementation.
+
+However, I am still not certain whether all the required fields to populate the Mainframe UserInfo are available in the SAML context.
+
+Since the Marvin framework has now been updated, let me verify whether the required fields are included in the SAML context. Based on that, we can determine whether we can populate these fields dynamically instead of relying on static values.
+
+Thanks,  
+[Your Name]
+
 
 ### 1. Key Challenge Faced and Overcome
 
