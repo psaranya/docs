@@ -16,7 +16,6 @@ Not necessarily.
 - Avoid unnecessary abstraction.
 - Introduce interfaces when they provide decoupling, multiple implementations, testability or architectural boundaries.
 - Avoid overengineering.
-A senior candidate should understand that abstraction has a cost.
 
 
 3. Polymorphism – Real-world scenarios
@@ -33,28 +32,18 @@ switch (transactionType) {
         // transfer logic
         break;
 }
-
-
 Tomorrow, the business introduces five more transaction types.
-
 How would you redesign it?
-
 Expected answer:
-
 Use polymorphism and a strategy-based approach.
 interface TransactionProcessor {
     void process(Transaction transaction);
 }
-
-
 Implement separate processors for deposit, withdrawal and transfer.
-
 Use a registry or Spring dependency injection to identify the appropriate processor.
 @Service
 class TransactionService {
-
     private final Map<String, TransactionProcessor> processors;
-
     TransactionService(List<TransactionProcessor> processorList) {
         this.processors = processorList.stream()
             .collect(Collectors.toMap(
@@ -62,7 +51,6 @@ class TransactionService {
                 Function.identity()
             ));
     }
-
     public void process(Transaction transaction) {
         TransactionProcessor processor =
             processors.get(transaction.getType());
@@ -99,8 +87,6 @@ class Account {
         this.balance = balance;
     }
 }
-
-
 What is wrong with this design? How would you improve it?
 
 Expected answer:
@@ -110,3 +96,114 @@ Expected answer:
 - Validate business rules inside the domain object.
 
 Look for extensibility, maintainability and Open/Closed Principle understanding.
+
+
+How does Spring Boot work internally?
+Question 4: Explain @Transactional. How does it work internally?
+
+Expected answer:
+
+Spring generally implements declarative transactions using AOP proxies.
+
+When a transactional method is invoked through the Spring proxy:
+1. Transaction interceptor intercepts the invocation.
+2. Transaction manager begins or joins a transaction.
+3. Business logic executes.
+4. On successful completion, transaction commits.
+5. On qualifying exceptions, transaction rolls back.
+Follow-up questions:
+
+Q: Why does @Transactional sometimes not work when one method calls another method in the same class?
+
+Expected: Self-invocation bypasses the Spring proxy, so the transactional interceptor is not invoked for the internal call.
+
+Q: Does @Transactional roll back for checked exceptions?
+
+Expected: By default, Spring rolls back for unchecked exceptions (RuntimeException and Error), not checked exceptions. rollbackFor can customize this.
+
+Q: What happens if a private method is annotated with @Transactional?
+
+Expected: In standard proxy-based transaction management, private methods are not intercepted as transactional entry points.
+
+Q: What is the difference between REQUIRED and REQUIRES_NEW?
+
+Expected:
+- REQUIRED: Joins an existing transaction or creates a new one.
+- REQUIRES_NEW: Suspends an existing transaction and starts a separate transaction.
+
+Suppose a single Spring Boot microservice needs to connect to two different databases, for example PostgreSQL and Oracle. How would you configure and manage both databases in the same application?
+
+How do you manage transactions across both databases?
+Expected answer:
+
+Each database has its own transaction manager.
+
+For example:
+@Transactional(
+    transactionManager = "customerTransactionManager"
+)
+public void saveCustomer() {
+    // Customer database transaction
+}
+
+
+For the second database:
+@Transactional(
+    transactionManager = "transactionTransactionManager"
+)
+public void saveTransaction() {
+    // Transaction database transaction
+}
+
+
+Q3. Suppose you save customer information in PostgreSQL and transaction information in Oracle. Both operations are part of one business operation.
+PostgreSQL save succeeds, but Oracle save fails. How do you ensure consistency?
+Very important senior-level question
+Expected answer:
+
+A local transaction manager cannot automatically provide atomicity across two independent databases.
+
+Possible approaches:
+1. JTA / XA transactions: Distributed transaction coordination across participating databases, where supported.
+2. Saga pattern: Use separate local transactions and compensating actions.
+3. Outbox pattern: Persist events reliably and process them asynchronously.
+4. Reconciliation: Identify and resolve incomplete business operations.
+The candidate should explain the trade-offs rather than simply saying @Transactional handles both.
+Q4. Can we use one @Transactional annotation to manage both databases?
+Expected answer:
+
+Not with two independent local transaction managers by default.
+
+A transaction managed by customerTransactionManager does not automatically include the Oracle transaction.
+
+A properly configured JTA transaction manager can coordinate both resources using XA.
+
+Question 7: Your REST API takes 5 seconds to respond. How would you troubleshoot?
+Scenario: An API was previously responding in 200 ms. Following a new release, response time has increased to 5 seconds.
+
+Expected answer:
+
+A senior engineer should follow a systematic investigation.
+1. Check application metrics: CPU, memory and request latency.
+2. Check distributed traces to identify slow service calls.
+3. Check thread dumps for blocked or waiting threads.
+4. Check database connection pool utilization.
+5. Inspect slow SQL queries and execution plans.
+6. Check GC pauses and heap utilization.
+7. Compare the new release with the previous version.
+8. Identify the bottleneck before optimizing.
+Follow-up:
+
+What if CPU utilization is low but requests are timing out?
+
+Expected: Investigate I/O waits, database connection exhaustion, thread pool exhaustion, network latency and downstream dependencies.
+
+How do you manage configuration across different environments?
+Expected answer:
+- Externalized configuration.
+- application.yml and profile-specific configuration.
+- Environment variables.
+- Configuration properties using @ConfigurationProperties.
+- Centralized configuration where appropriate.
+- Secret management through secure vaults or cloud secret managers.
+
