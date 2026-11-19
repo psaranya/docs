@@ -1,3 +1,61 @@
+Encapsulation – Banking account scenario
+Interviewer: You are developing a banking application. An Account class contains an account balance. How would you ensure that external classes cannot directly modify the balance?
+Expected answer:
+Use encapsulation by making the balance private and providing controlled methods to modify it.
+Follow-up: Is making a variable private alone sufficient to achieve encapsulation?
+Expected: No. We should also control how the object's state is accessed and modified.
+
+Composition vs inheritance
+Interviewer: An Employee has an Address. Would you use inheritance or composition?
+
+Expected answer:
+
+Composition, because an Employee HAS-A Address rather than IS-A Address.
+
+Principle	Meaning
+S – Single Responsibility	One reason to change
+O – Open/Closed	Open for extension, closed for modification
+L – Liskov Substitution	Subtypes should be usable in place of base types
+I – Interface Segregation	Prefer smaller, focused interfaces
+D – Dependency Inversion	Depend on abstractions, not concrete implementations
+
+String immutability scenario
+Interviewer: Why is String immutable in Java? What problems might arise if String were mutable?
+Expected answer:
+String immutability provides:
+- Thread safety.
+- String pool optimization.
+- Security for sensitive values used in class loading, file paths and network connections.
+- Stable hashCode caching.
+
+Q8. HashMap scenario
+Interviewer: You are using an Employee object as a key in HashMap. You insert an employee and later update its employeeId. Now you cannot retrieve the value using the same object. Why?
+
+Expected answer:
+HashMap calculates the bucket using the key's hashCode.
+If employeeId participates in hashCode and is changed after insertion, the new hashCode may point to a different bucket.
+
+Solution:
+- Use immutable keys.
+- Avoid changing fields involved in equals() and hashCode() after insertion.
+Follow-up: What happens if two different keys have the same hashCode?
+Expected: Hash collision occurs. HashMap handles collisions using linked lists or tree bins.
+
+Database duplicate transaction scenario
+Interviewer: A customer clicks the transfer button twice. Your API receives two identical requests. How do you avoid processing the transfer twice?
+
+Expected answer:
+
+Implement idempotency.
+1. Client sends a unique idempotency key.
+2. Server checks whether that key has already been processed.
+3. Store the key with transaction status and response.
+4. Use a database unique constraint to prevent concurrent duplicate processing.
+5. Return the previous result for an already processed request.
+
+
+
+
 Encapsulation protects an object’s internal state and enforces rules.
 Abstraction hides implementation details and exposes only behavior.
 Inheritance allows reuse through IS-A relationships, but should be used carefully.
