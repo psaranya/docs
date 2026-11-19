@@ -1,0 +1,112 @@
+You have a mutable object used as a HashMap key. One of its fields changes after insertion.
+What happens?
+Expected answer:
+If the modified field participates in equals() and hashCode(), the object's hash code can change.
+The object may become inaccessible through normal HashMap lookups because it remains in the bucket determined by its original hash code.
+Solutions:
+- Prefer immutable keys.
+- Avoid modifying fields used by equals/hashCode after insertion.
+- Use immutable value objects where appropriate.
+
+You are reviewing an application where developers have created interfaces for every class, even when there is only one implementation and no meaningful abstraction.
+Is this good design?
+Expected answer:
+Not necessarily.
+- Interfaces should represent meaningful contracts.
+- Avoid unnecessary abstraction.
+- Introduce interfaces when they provide decoupling, multiple implementations, testability or architectural boundaries.
+- Avoid overengineering.
+A senior candidate should understand that abstraction has a cost.
+
+
+3. Polymorphism – Real-world scenarios
+Q5. You have an application supporting multiple transaction types: Deposit, Withdrawal and Fund Transfer.
+Currently, you have a large switch statement:
+switch (transactionType) {
+    case "DEPOSIT":
+        // deposit logic
+        break;
+    case "WITHDRAWAL":
+        // withdrawal logic
+        break;
+    case "TRANSFER":
+        // transfer logic
+        break;
+}
+
+
+Tomorrow, the business introduces five more transaction types.
+
+How would you redesign it?
+
+Expected answer:
+
+Use polymorphism and a strategy-based approach.
+interface TransactionProcessor {
+    void process(Transaction transaction);
+}
+
+
+Implement separate processors for deposit, withdrawal and transfer.
+
+Use a registry or Spring dependency injection to identify the appropriate processor.
+@Service
+class TransactionService {
+
+    private final Map<String, TransactionProcessor> processors;
+
+    TransactionService(List<TransactionProcessor> processorList) {
+        this.processors = processorList.stream()
+            .collect(Collectors.toMap(
+                TransactionProcessor::getType,
+                Function.identity()
+            ));
+    }
+
+    public void process(Transaction transaction) {
+        TransactionProcessor processor =
+            processors.get(transaction.getType());
+
+        if (processor == null) {
+            throw new IllegalArgumentException("Unsupported type");
+        }
+
+        processor.process(transaction);
+    }
+}
+
+Follow-up questions:
+1. What happens if two processors register the same transaction type?
+2. How would you handle unsupported transaction types?
+3. How would you introduce a new transaction type without modifying existing implementations?
+4. How would you unit test individual processors?
+
+
+You have a Customer class containing 20 fields. Multiple services directly access and modify these fields. How would you redesign it?
+Expected answer:
+- Make fields private.
+- Expose meaningful business operations instead of unrestricted setters.
+- Group related fields into value objects where appropriate.
+- Enforce invariants within the domain model.
+- Avoid creating unnecessary getters and setters for every field.
+Look for whether the candidate understands encapsulation beyond simply making variables private.
+
+Q1. You are developing a banking application. An Account class has a balance field. Any developer can directly modify the balance using a setter.
+class Account {
+    private double balance;
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+}
+
+
+What is wrong with this design? How would you improve it?
+
+Expected answer:
+- Directly setting the balance violates encapsulation and business rules.
+- A developer could set a negative balance or overwrite the existing balance.
+- Balance modifications should happen through controlled business operations.
+- Validate business rules inside the domain object.
+
+Look for extensibility, maintainability and Open/Closed Principle understanding.
