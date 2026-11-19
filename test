@@ -1,24 +1,22 @@
-public String getTppId() {
+Hi Folks,
 
-    var securityContext = securityContextProvide.get();
+We know you are super busy making things happen, solving problems, delivering milestones and keeping everything running smoothly! 😊
 
-    if (securityContext == null) {
-        return null;
-    }
+But wait… who's going to know about all these amazing things if we don't talk about them?
 
-    var subjectIdsOptional = securityContext.getOeMappedSubjectIds();
+It's time to step out of execution mode and into **showcase mode!** 
 
-    if (subjectIdsOptional == null || !subjectIdsOptional.isPresent()) {
-        return null;
-    }
+We are putting together our H2 Newsletter, and we would love to feature your team's achievements, key highlights, success stories, appreciations, awards, milestones and those little (or big!) wins that deserve a spotlight.
 
-    var subjectIds = subjectIdsOptional.get();
+**And no, we are hoping this won't turn into an individual follow-up campaign where we have to chase everyone one by one to discover what your teams have achieved!** 😂 Let's save everyone some calendar invites and follow-up messages!
 
-    if (subjectIds == null) {
-        return null;
-    }
+Don't be shy! This is your team's moment to shine. After all, great work deserves great visibility, and we don't want any achievement going unnoticed simply because it wasn't shared!
 
-    var tppId = subjectIds.get("TPP_ID");
+So, please take a few minutes to send us your updates. A few bullet points are perfectly fine – we'll take care of the storytelling!
 
-    return tppId != null ? tppId.toString() : null;
-}
+Looking forward to hearing about all the amazing things your teams have been up to.
+
+**Let's celebrate the wins, appreciate the people and make this H2 Newsletter worth reading!** 🎉
+
+Thanks,
+[Your Name]
