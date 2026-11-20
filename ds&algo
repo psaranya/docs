@@ -14,6 +14,16 @@ Course Schedule
 Coin Change
 Binary Tree Level Order Traversal
 
+
+Given a string s, find the length of the longest substring without repeating characters.
+Input: s = "abcabcbb"
+Output: 3
+Explanation: "abc" is the longest substring.
+Input: s = "pwwkew"
+Output: 3
+Explanation: "wke" is the longest substring.
+
+
 Given an array and a target, return all unique pairs [a, b] such that:
 nums = [1, 2, 3, 2, 3, 4]
 target = 5
