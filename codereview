@@ -1,0 +1,35 @@
+You are reviewing the following code. What problems do you see?
+public Account getAccount(Long accountId) {
+    Account account = accountRepository.findById(accountId).get();
+    return account;
+}
+Expected answer:
+- .get() can throw NoSuchElementException if the account doesn't exist.
+- Handle missing records using orElseThrow().
+- Consider throwing a meaningful business exception.
+- Avoid exposing JPA entities directly from the API layer; map to DTOs where appropriate.
+public Account getAccount(Long accountId) {
+    return accountRepository.findById(accountId)
+        .orElseThrow(() ->
+            new AccountNotFoundException("Account not found"));
+}
+Follow-up: Would you handle this exception in the service or controller? Why?
+
+
+
+What concerns do you have with this code?
+public List<Employee> getEmployees() {
+    List<Employee> employees = repository.findAll();
+
+    return employees.stream()
+        .filter(e -> e.getDepartment().equals("IT"))
+        .toList();
+}
+Expected answer:
+- Fetching all records and filtering in Java is inefficient.
+- Filtering should ideally happen at the database level.
+- Potential NullPointerException if department is null.
+
+Page<Employee> findByDepartment(
+    String department, Pageable pageable);
+- Consider pagination for large datasets.
