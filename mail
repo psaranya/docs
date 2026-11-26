@@ -1,4 +1,8 @@
+Hi, I have an urgent and unplanned production deployment tomorrow for security patches related to the base image upgrade, and it requires my immediate attention to meet the go-live timeline.
 
+I also have an interview scheduled during the same time. Could you please postpone it or assign it to someone else?
+
+Sorry for the short notice, and thanks for understanding.
 We have identified vulnerabilities related to the RHEL libraries inherited from the base image, which is common across all KASH components. Since we are targeting go-live tomorrow, could you please review and provide a waiver for these vulnerabilities to help us unblock the deployment?
 
 
