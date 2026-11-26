@@ -1,4 +1,7 @@
 
+We have identified vulnerabilities related to the RHEL libraries inherited from the base image, which is common across all KASH components. Since we are targeting go-live tomorrow, could you please review and provide a waiver for these vulnerabilities to help us unblock the deployment?
+
+
 Hi,
 
 I have reviewed all four profiles, and all of them appear to be a good match for the Full Stack Developer role.
