@@ -1,3 +1,48 @@
+Q40. How would you handle database connection pool exhaustion?
+Expected:
+- Check HikariCP metrics.
+- Investigate slow queries.
+- Identify connection leaks.
+- Check long-running transactions.
+- Review pool size against DB capacity.
+- Ensure connections are released.
+- Avoid increasing pool size blindly.
+
+
+How do microservices communicate?
+Expected:
+- Synchronous: REST, gRPC.
+- Asynchronous: Kafka, RabbitMQ.
+
+Q16. Spring Singleton bean concurrency
+A Spring service is singleton-scoped and contains:
+@Service
+class OrderService {
+    private String currentUser;
+
+    public void process(String user) {
+        currentUser = user;
+        // process order
+    }
+}
+Two users call the API simultaneously.
+What could happen?
+Expected answer:
+Race condition. One user's value can overwrite another user's value.
+Spring singleton scope does not mean thread-safe.
+Keep request-specific data in local variables rather than mutable singleton fields.
+
+Q43. What happens when one downstream microservice is unavailable?
+Expected:
+- Timeouts.
+- Retry with exponential backoff and jitter.
+- Circuit breaker.
+- Fallback where appropriate.
+- Bulkhead isolation.
+- Dead-letter queues for asynchronous processing.
+- Monitoring and alerting.
+
+
 "Virtual Threads are lightweight threads introduced in Java 21. Unlike traditional threads, they are managed by the JVM instead of mapping one-to-one with OS threads. When a virtual thread waits for I/O, such as a database or REST API call, the JVM releases the underlying OS thread so it can execute other tasks. This lets us handle a much larger number of concurrent requests with simple synchronous code, making virtual threads ideal for I/O-heavy Spring Boot microservices."
 Suppose my Spring Boot service receives 1,000 requests, and each request calls a mainframe API that takes one second to respond. With traditional threads, many OS threads remain blocked waiting for the response. With virtual threads, while one request waits for the mainframe, the JVM frees the underlying OS thread to process another request. This allows the application to handle many more concurrent requests using the same hardware.
 A virtual thread is created and managed by the JVM. It is scheduled to run on a platform thread when it needs CPU time. If the virtual thread performs a blocking I/O operation, the JVM suspends it, releases the platform thread to do other work, and later resumes the virtual thread on any available platform thread.
